@@ -1,3 +1,4 @@
+// import './editor.scss';
 import { useState } from '@wordpress/element';
 import { TextControl, Notice } from '@wordpress/components';
 
@@ -14,8 +15,6 @@ export default function Edit({ attributes, setAttributes }) {
         setTitleTouched(true);
         if (!title) {
             setTitleError('O título é obrigatório.');
-        } else if (title.length > 100) {
-            setTitleError('O título deve ter até 100 caracteres.');
         } else {
             setTitleError(null);
         }
@@ -28,8 +27,6 @@ export default function Edit({ attributes, setAttributes }) {
 
         if (!cep) {
             setCepError('O CEP é obrigatório.');
-        } else if (cep.length !== 8) {
-            setCepError('CEP inválido.');
         } else {
             fetch(`https://viacep.com.br/ws/${cep}/json/`)
                 .then(response => response.json())
@@ -48,13 +45,15 @@ export default function Edit({ attributes, setAttributes }) {
     };
 
     return (
-        <div class="wp-block-via-cep-block">
+        <div id="wp-block-bloco-endereco">
 
             <TextControl
-                label="Título"
+                label="Título*"
                 value={title}
                 onChange={(value) => setAttributes({ title: value })}
                 onBlur={onTitleBlur}
+                maxLength={80}
+                placeholder="Adicione seu título para o card de Endereço"
             />
             {titleTouched && titleError && (
                 <Notice status="error" isDismissible={false}>
@@ -63,11 +62,16 @@ export default function Edit({ attributes, setAttributes }) {
             )}
 
             <TextControl
-                label="CEP"
+                label="CEP*"
                 value={cep}
-                onChange={(value) => setAttributes({ cep: value })}
+                onChange={(value) => {
+                    const onlyNumbers = value.replace(/[^0-9]/g, '');
+                    setAttributes({ cep: onlyNumbers });
+                }}
                 onBlur={onCepBlur}
-            />
+                maxLength={8}
+                placeholder="Insira o CEP (Somente números)"
+                />            
             {cepTouched && cepError && (
                 <Notice status="error" isDismissible={false}>
                     {cepError}
@@ -82,8 +86,8 @@ export default function Edit({ attributes, setAttributes }) {
                         onChange={(value) => setNumero(value)}
                         placeholder="Insira o número"
                     />
-                    
-                    <div class="wp-block-via-cep-block">
+                    <span>Prévia da visualização no site:</span>
+                    <div class="infos">
 						<h2>{title}</h2>
 						<p>
 							<strong>Endereço:</strong> {address.logradouro}{numero && `, ${numero}`}<br/>

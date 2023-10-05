@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     Bloco de Endereço
- * Plugin URI: 		http://www.hughlashbrooke.com/
+ * Plugin URI: 		https://github.com/rickgomes43/bloco-endereco/blob/main/README.md
  * Description:     Plugin de Teste para Studio Visual.
  * Author:          Ricardo Gomes
  * Author URI:      https://www.rickgomes.com.br
